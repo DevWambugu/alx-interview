@@ -1,0 +1,20 @@
+#!/usr/bin/python3
+'''the function returns fewest number
+of steps'''
+def minOperations(n):
+    '''This function returns the fewest number
+    of steps to achieve characters equal to n'''
+    character_list = ['H']
+    count = 0
+    for c in range(n):
+        count += 1
+        first_paste = character_list * 2
+        second_paste = first_paste + character_list
+        number_elements = len(second_paste)
+        if number_elements == n:
+            return count
+        character_list = second_paste
+    return 0
+n = 2
+result = minOperations(n)
+print(f"Count to reach {n} elements: {result}")
