@@ -1,0 +1,39 @@
+#!/usr/bin/python3
+'''0 validate_utf8'''
+
+
+def validUTF8(data)
+    '''determines if a given data set
+    represents a valid UTF-8 encoding
+    Iniatialize a counter variable
+    count, the counter checks the
+    number of bytes in the UTF-8
+    encoding. If not met, then the function
+    returns 0'''
+    count = 0
+    for byte in data:
+        if count == 0:
+            if byte & 0x80 == 0:
+                continue
+            elif byte & 0xe0 == 0xc0:
+                count = 1
+            elif byte & 0xf0 == 0xe0:
+                count = 2
+            elif byte & 0xf8 == 0xf0:
+                count = 3
+            else:
+                return False
+        else:
+            '''check whether the current
+            byte is a valid continuation
+            byte in UTF-8 encoding. A valid
+            continuation byte in UTF-8 starts
+            with the binary pattern 10xxxxxx
+            return false if the condition is not met
+            If the byte is a valid continuation byte,
+            the count variable is decremented by 1
+            '''
+            if byte & 0xc0 != 0x80:
+                return False
+            count -= 1
+    return count == 0
