@@ -5,37 +5,29 @@
 import sys
 
 
-def column_validity(column, queens):
+def column_validity(board, row, col):
     '''This function checks if placing
     a queen in a certain column is valid'''
-    for row, other_col in queens:
-        '''Check if the queens are in the
-        same row, column, or diagonal'''
-        if column == other_col or \
-                abs(column - other_col) == abs(row - other_col):
+    for i in range(row):
+        if board[i] == col:
+            return False
+
+        if abs(i - row) == abs(board[i] - col):
             return False
     return True
 
 
-def solve_n_queens(n, column, queens):
+def solve_n_queens(n, board, row, solutions):
     '''This function solves the n-queens
     problem'''
-    global solutions
-    if column == n:
-        '''Print a solution if all queens are placed'''
-        solutions.append([queen[0] for queen in queens])
+    if row == n:
+        solutions.append([[i, board[i]] for i in range(n)])
         return
-    for row in range(n):
-        '''for each row, try placing a queen in each
-        row of the current column'''
-        if column_validity(column, queens):
-            queens.append((row, column))
-            solve_n_queens(n, column + 1, queens)
-            queens.pop()
-
-
-'''Store the solutions'''
-solutions = []
+    for col in range(n):
+        if column_validity(board, row, col):
+            board[row] = col
+            solve_n_queens(n, board, row + 1, solutions)
+            board[row] = -1
 
 
 def main():
@@ -43,7 +35,7 @@ def main():
     to solve the puzzle'''
     if len(sys.argv) != 2:
         '''Check if the user gives 2 arguments'''
-        print("n should be == 2", file=sys.stderr)
+        print("Total arguments should be 2", file=sys.stderr)
         sys.exit(1)
     try:
         '''Check if the secon argumnet is a number'''
@@ -60,18 +52,11 @@ def main():
         care of overflows.'''
         print("N must be between 1 and 32", file=sys.stderr)
         sys.exit(1)
-    solve_n_queens(n, 0, [])
-    if solutions:
-        '''Print the solutions.'''
-        for solution in solutions:
-            print("[", end="")
-        for i, pair in enumerate(solution):
-            print(pair, end="")
-        if i != len(solution) - 1:
-            print(", ", end="")
-            print("]")
-        else:
-            print("No solutions found!")
+    board = [-1] * n
+    solutions = []
+    solve_n_queens(n, board, 0, solutions)
+    for solution in solutions:
+        print(solution)
 
 
 if __name__ == "__main__":
