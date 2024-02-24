@@ -26,6 +26,7 @@ def rotate_2d_matrix(matrix):
     reverse_matrix(matrix)
     return matrix
 
+
 def print_matrix(matrix):
     '''Print the matrix with proper formatting'''
     for row in matrix:
